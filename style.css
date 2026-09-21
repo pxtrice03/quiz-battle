@@ -1,0 +1,18 @@
+@import url('./theme.css');
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.btn {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-radius: var(--radius);
+
+    &:hover {
+        background: var(--primary-hover);
+    }
+}
