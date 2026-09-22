@@ -1,24 +1,76 @@
-@import url('./theme.css');
+@import url('./interface.css');
 
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
+#quizBattleUI {
+    max-width: 690px;
+    margin: 0 auto;
+    padding: 20px 16px 48px;
+}
 .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
 }
-
 .btn {
     background: var(--primary);
     color: var(--on-primary);
     border-radius: var(--radius);
+    padding: 12px 22px;
+    border: 3px solid var(--border);
+    box-shadow: 0 4px 0 var(--border);
+    transition:
+        background 0.5s cubic-bezier(0.215, 0.610, 0.355, 1),
+        box-shadow 0.5s cubic-bezier(0.075, 0.82, 0.165, 1),
+        transform 0.3s ease
+    ;
 
     &:hover {
         background: var(--primary-hover);
+    }
+
+    &:active {
+        transform: translateY(3px);
+        box-shadow: 0 0 0 var(--border);
+    }
+}
+.question {
+    font-family: var(--font-body);
+}
+.answers {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 1fr 1fr;
+
+    @media (max-width: 425px) {
+        .answers {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+.answer {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    background: var(--surface-2);
+    color: var(--muted-ink);
+    border: 3px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    box-shadow: 0 4px 0 var(--border);
+    font-family: var(--font-body);
+    transition:
+        transform .3s, 
+        box-shadow .5s cubic-bezier(0.215, 0.610, 0.355, 1),
+        background .5s cubic-bezier(0.215, 0.610, 0.355, 1);
+
+    &:active:not(:disabled) {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 var(--border);
     }
 }
