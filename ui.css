@@ -1,0 +1,64 @@
+:root {
+    --bg: #fff5fa;
+    --surface: #fff;
+    --surface-2: #ffe8f3;
+    --border: #ff8fc4;
+    --ink: #5a3d55;
+    --ink-white: #fff;
+    --muted-ink: #a680a0;
+    --secondary-hover: #88888858;
+    --ink-secondary: #888;
+    --border-secondary: #808080;
+    --primary: #ffcfe4;
+    --primary-hover: #ff73b6;
+    --on-primary: #fff;
+    --accent: #9fe3f0;
+    --correct-bg: #a8e6c1;
+    --correct: #47f68d;
+    --warning-bg: #ffe08a;
+    --warning: #ffd35c;
+    --wrong-bg: #ff9aa8;
+    --wrong: #fd5a70;
+    --shadow: 0 6px 0 rgba(253, 203, 226, 0.25);
+    --radius: 14px;
+    --font-body: "Space Grotesk", sans-serif;
+    --font-score: "Orbitron", sans-serif;
+    --font-badge: "Caveat", cursive;
+    /* "Caveat", cursive  */
+    /* "Space Grotesk", sans-serif  */
+    /* "Orbitron", sans-serif  */
+    /* "Russo One", sans-serif  */
+    /* "Press Start 2P", system-ui  */
+    /* "Bricolage Grotesque", sans-serif  */
+}
+body {
+    background: var(--bg);
+    color: var(--ink);
+    transition: background 0.25s ease, color 0.25s ease;
+    font-family: var(--font-body);
+}
+h1 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    margin: 0;
+    font-size: 2.5rem;
+}
+button {
+    border: 0;
+    appearance: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    background: none;
+    font-size: 1.3rem;
+    font-weight: 700;
+    font: inherit;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+li {
+    list-style: none;
+    font: inherit;
+}
