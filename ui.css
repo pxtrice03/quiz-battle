@@ -12,7 +12,6 @@
     --primary: #ffcfe4;
     --primary-hover: #ff73b6;
     --on-primary: #fff;
-    --accent: #9fe3f0;
     --correct-bg: #a8e6c1;
     --correct: #47f68d;
     --warning-bg: #ffe08a;
@@ -36,11 +35,20 @@ body {
     color: var(--ink);
     transition: background 0.25s ease, color 0.25s ease;
     font-family: var(--font-body);
+    font-size: 1.2rem;
 }
-h1 {
+h1, h2 {
     font-family: "Bricolage Grotesque", sans-serif;
     margin: 0;
+}
+h1 {
     font-size: 2.5rem;
+}
+h2 {
+    font-size: 1.8rem;
+}
+a {
+    color: var(--ink);
 }
 button {
     border: 0;
@@ -61,4 +69,46 @@ ul {
 li {
     list-style: none;
     font: inherit;
+}
+/* 
+animation: scaleUp 0.4s cubic-bezier(0.390, 0.575, 0.565, 1) both;
+animation: scaleDown 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+*/
+@keyframes scaleUp {
+    0% {
+        transform: scale(0.5);
+    }
+    55% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@keyframes scaleDown {
+    0% {
+        transform: scale(1);
+    }
+    55% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+@keyframes blurIn {
+    0% {
+        backdrop-filter: blur(0);
+    }
+    100% {
+        backdrop-filter: blur(2.5px);
+    }
+}
+@keyframes blurIn {
+    0% {
+        backdrop-filter: blur(2.5px);
+    }
+    100% {
+        backdrop-filter: blur(0);
+    }
 }
