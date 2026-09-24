@@ -110,6 +110,8 @@
     padding-top: 55px;
 
     h1 {
+        margin-top: 20px;
+
         b {
             display: inline-block;
             background: var(--surface);
@@ -228,6 +230,7 @@
 }
 .feedback {
     font-weight: 800;
+    display: none;
 }
 .feedback.correct {
     color: var(--correct);
