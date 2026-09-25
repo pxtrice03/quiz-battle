@@ -5,7 +5,7 @@ const GAME = [
         questions: [
             {
                 q: "Completez la phrase: Une variable ...",
-                a: ["Mets de cote", "Reserve", "Stocke", "Reserve"],
+                a: ["Mets de cote", "Reserve", "Stocker", "Garder"],
                 c: 2
             },
             {
@@ -68,8 +68,9 @@ const CORRECT = 100
 const WRONG = 25
 const Q_KEYS = ["A", "B", "C", "D"]
 const SCREENS = ["Start", "Rules", "Quiz", "Final"]
-const L_TIMERS = GAME.map(q => q.time).reverse()
-// Difficulty keys: 0: Beginner, 1: Intemediate, 2: Advanced
+const LVL_TIMERS = GAME.map(q => q.time)
+// Difficulty keys: 0: Beginner, 1: Intemediate, 2: Difficult
+const LVL_TITLE = ["Debutant", "Moyen", "Difficile"]
 
 // helper functions
 const byId = id => document.getElementById(id)
@@ -108,7 +109,7 @@ const feedback = byId("feedback")
 
 let qId = 0, levelId = 0
 // score & progress tracking
-let score = 0, correctAnswers = 0, totalAnswerd = 0, totalQuestions = 0
+let score = 0, correctAnswers = 0, totalAnswerd = 0
 let results = [] // results[i] = { correct, total }
 let answered = false // prevents double-clicking or clicking after timeout
 let currentLevel = 0
@@ -117,7 +118,7 @@ let timer = null
 const q = GAME[currentLevel].questions[currentQuestion]
 
 // update timer bar
-const startCountdown = (seconds, barEl = byId("bar")) => {
+const startTimer = (seconds, barEl = byId("bar")) => {
     const total = seconds
     const tick = () => {
         const quarterTime = 1 / 4 * total // 1/4 of seconds
@@ -132,6 +133,14 @@ const startCountdown = (seconds, barEl = byId("bar")) => {
         setTimeout(tick, 1000)
     }
     tick()
+}
+const stopTimer = () => {}
+
+const resetGame = () => {
+    let score = 0, correctAnswers = 0, totalAnswerd = 0
+    let currentLevel = 0
+    let currentQuestion = 0
+    let timer = null
 }
 
 const nextQuestion = () => {
@@ -149,9 +158,9 @@ const completeLevel = () => {
     currentQuestion = 0
     if(currentLevel < GAME.length) {
         loadQuestion()
-    } else {
-        showFinalScore()
-    }
+    }// else {
+    //     showFinalScore()
+    // }
 }
 
 const showCorrectAnswer = (answerId) => {
@@ -160,6 +169,14 @@ const showCorrectAnswer = (answerId) => {
     setTimeout(() => {
         feedback.style.display = 'none'
     }, 2500);
+    answers.querySelectorAll('button')[answerId].classList.add('correct')
+}
+
+const updateQuestionCount = () => {
+    questionCount.innerHTML = ""
+    const levelQuestTotal = GAME[currentLevel].questions.length
+    totalAnswerd++
+    questionCount.innerHTML = `Question: <strong>${totalAnswerd}</strong> sur <strong>${levelQuestTotal}</strong>`
 }
 
 const checkAnswer = (selectedBtnId, clickedBtn) => {
@@ -168,35 +185,50 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
         if(i !== selectedBtnId) b.classList.add('disabled')
     })
 
-    totalQuestions++
+    updateQuestionCount()
 
     if(selectedBtnId === q.c) {
-        score += 100
+        score += CORRECT
         clickedBtn.classList.add("correct")
+        correctAnswers++
     } else {
-        score = Math.max(0, score - 25)
+        score = Math.max(0, score - WRONG)
         clickedBtn.classList.add("wrong")
         // show the correct answer
         showCorrectAnswer(q.c)
     }
     xp.textContent = `${score} XP`
+    nextQuestion
+}
+
+const resetTxts = () => {
+    levelTitle.innerHTML = ""
+    questionCount.innerHTML = ""
+    question.innerHTML = ""
+    answers.innerHTML = ""
 }
 
 const loadQuestion = () => {
-    question.innerHTML = ""
+    resetTxts()
+    levelTitle.innerHTML = LVL_TITLE[currentLevel]
+    const levelQuestTotal = GAME[currentLevel].questions.length
+    totalAnswerd++
+    questionCount.innerHTML = `Question: <strong>${totalAnswerd}</strong> sur <strong>${levelQuestTotal}</strong>`
     question.textContent = q.q
     // const shuffleAnswers = shuffleArr([...q.a])
     const ans = [...q.a]
-    answers.innerHTML = ""
     ans.forEach((a, i) => {
         const button = document.createElement('button')
         button.classList.add('answer')
+        // button.dataset.key = Q_KEYS[i]
+        button.setAttribute('data-key', Q_KEYS[i])
+        button.classList.remove('correct', 'wrong')
         button.textContent = a
         button.addEventListener('click', (e) => checkAnswer(i, e.currentTarget))
         answers.appendChild(button)
     })
-    timer = GAME[currentLevel].time
-    startCountdown(timer)
+    timer = LVL_TIMERS[currentLevel]
+    startTimer(timer)
 }
 
 const loadGame = () => {
@@ -208,4 +240,5 @@ const showFinalScore = () => {}
 // GAME LOAD
 document.addEventListener('DOMContentLoaded', () => {
     loadQuestion()
+    console.log(q.a[0])
 })
