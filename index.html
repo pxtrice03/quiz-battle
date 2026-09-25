@@ -10,7 +10,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@400..700&family=Orbitron:wght@400..900&family=Press+Start+2P&family=Russo+One&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="quizBattleUI"></div>
-    <script src="./app.js"></script>
+    <div id="quizBattleUI">
+        <!-- <span class="badge">by <a href="https://github.com/pxtrice03">Patrice</a> & Kevyn</span> -->
+
+        <!-- Start Screen -->
+        <!-- <section id="screenStart" class="message">
+            <div class="modal">
+                <p>Bienvenue sur <span><b>Quiz</b> Battle</span></p>
+                <button type="button" class="btn" id="gameWelcome">Voir les regles</button>
+            </div>
+        </section> -->
+
+        <!-- Rules Screen -->
+        <!-- <section id="screenRule" class="message">
+            <div class="modal">
+                <h2>Les regles du jeux</h2>
+                <ul class="rules">
+                    <li class="rule">3 niveaux, 6 questions chacun</li>
+                    <li class="rule">+100 XP par bonne reponse</li>
+                    <li class="rule">-25 XP par erreur ou temps ecoule</li>
+                </ul>
+                <button type="button" class="btn" id="gameStart">Commencer</button>
+            </div>
+        </section> -->
+
+        <!-- Actual Quiz Screen -->
+        <section id="screenQuiz" class="screen">
+            <h1><b>Quiz</b> <i>Battle</i></h1>
+            <div class="header">
+                <div class="tracker">
+                    <span>Niveau: <strong id="levelTitle"></strong></span>
+                    <span id="questCount"></span>
+                </div>
+                <div class="score">
+                    <span>Score</span>
+                    <p><strong id="xp">0 XP</strong></p>
+                </div>
+            </div>
+
+            <div class="timer">
+                <div id="bar" class="bar"></div>
+                <span><strong id="secs">15s</strong></span>
+            </div>
+
+            <p id="question" class="question"></p>
+
+            <div id="answers" class="answers">
+                <!-- <button class="answer correct" data-key="A">correct answer</button>
+                <button class="answer disabled" data-key="B">disabled option</button>
+                <button class="answer" data-key="C">answer 3</button>
+                <button class="answer wrong" data-key="D">wrong answer</button> -->
+            </div>
+            <p id="feedback" class="feedback">Feedback according to user response! +100 XP</p>
+        </section>
+
+        <!-- Final screen: Stats & Scores -->
+        <!-- <section id="screenFinal" class="message">
+            <div id="quizEndGame" class="modal"></div>
+            <button type="button" id="replay">Rejouer</button>
+        </section> -->
+    </div>
+    <script src="./game.js"></script>
 </body>
 </html>
