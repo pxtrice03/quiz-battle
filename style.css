@@ -213,9 +213,9 @@
     color: currentColor;
 }
 .answer.correct {
-    background: var(--correct-bg);
-    border-color: var(--correct);
-    box-shadow: 0 4px 0 var(--correct);
+    background: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    box-shadow: 0 4px 0 var(--correct) !important;
 }
 .answer.wrong {
     background: var(--wrong-bg);
