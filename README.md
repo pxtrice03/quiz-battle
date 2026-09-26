@@ -1,4 +1,4 @@
-# quiz-battle
+# Quiz Battle
 
  A simple quiz game with levels.
  The questions are built-in the game with a total of 3 levels of difficulties.
