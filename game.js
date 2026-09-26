@@ -67,7 +67,7 @@ const GAME = [
 const CORRECT = 100
 const WRONG = 25
 const Q_KEYS = ["A", "B", "C", "D"]
-const SCREENS = ["Start", "Rules", "Quiz", "Final"]
+const SCREENS = ["Welcome", "Rules", "Quiz", "Final"]
 const LVL_TIMERS = GAME.map(q => q.time)
 // Difficulty keys: 0: Beginner, 1: Intemediate, 2: Difficult
 const LVL_TITLE = ["Debutant", "Moyen", "Difficile"]
@@ -76,7 +76,7 @@ const LVL_TITLE = ["Debutant", "Moyen", "Difficile"]
 const byId = id => document.getElementById(id)
 
 const show = name => SCREENS.forEach(s => {
-    byId('screen' + s).hidden = s !== name
+    byId('screen' + s).classList.toggle('hidden', s !== name)
 })
 
 const shuffleArr = (array) => {
@@ -115,7 +115,8 @@ let answered = false // prevents double-clicking or clicking after timeout
 let currentLevel = 0
 let currentQuestion = 0
 let timer = null
-const q = GAME[currentLevel].questions[currentQuestion]
+let q
+let answerd = false
 
 // update timer bar
 const startTimer = (seconds, barEl = byId("bar")) => {
@@ -145,22 +146,17 @@ const resetGame = () => {
 
 const nextQuestion = () => {
     currentQuestion++
-    const level = GAME[currentLevel]
-    if(currentQuestion < level.questions.length) {
+    if(currentQuestion < GAME[currentLevel].questions.length) {
         loadQuestion()
-    } else {
-        currentLevel++
+        return
     }
-}
-
-const completeLevel = () => {
     currentLevel++
     currentQuestion = 0
     if(currentLevel < GAME.length) {
         loadQuestion()
-    }// else {
-    //     showFinalScore()
-    // }
+    } else {
+        showFinalScore()
+    }
 }
 
 const showCorrectAnswer = (answerId) => {
@@ -180,6 +176,11 @@ const updateQuestionCount = () => {
 }
 
 const checkAnswer = (selectedBtnId, clickedBtn) => {
+    if(answerd) return
+    answerd = true
+
+    q = GAME[currentLevel].questions[currentQuestion]
+
     // disable evry list element
     answers.querySelectorAll('button').forEach((b, i) => {
         if(i !== selectedBtnId) b.classList.add('disabled')
@@ -198,7 +199,10 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
         showCorrectAnswer(q.c)
     }
     xp.textContent = `${score} XP`
-    nextQuestion
+    setTimeout(() => {
+        answerd = false
+        nextQuestion()
+    }, 1500);
 }
 
 const resetTxts = () => {
@@ -212,8 +216,8 @@ const loadQuestion = () => {
     resetTxts()
     levelTitle.innerHTML = LVL_TITLE[currentLevel]
     const levelQuestTotal = GAME[currentLevel].questions.length
-    totalAnswerd++
     questionCount.innerHTML = `Question: <strong>${totalAnswerd}</strong> sur <strong>${levelQuestTotal}</strong>`
+    q = GAME[currentLevel].questions[currentQuestion]
     question.textContent = q.q
     // const shuffleAnswers = shuffleArr([...q.a])
     const ans = [...q.a]
@@ -232,13 +236,33 @@ const loadQuestion = () => {
 }
 
 const loadGame = () => {
-    gameStart.style.animation = 'animation: scaleDown 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both'
+    const startScreens = document.querySelectorAll('start')
+    const rules = [
+        `${GAME.length} niveaux, ${GAME[0].questions.length} questions chacun`,
+        `+${CORRECT} XP par bonne reponse`,
+        `-${WRONG} XP par erreur ou temps ecoule`
+    ]
+    const rulesEl = byId('rules')
+    rulesEl.innerHTML = ""
+    rules.forEach(r => {
+        const li = document.createElement('li')
+        li.classList.add('rule')
+        li.textContent = r
+        rulesEl.appendChild(li)
+    })
 }
 
 const showFinalScore = () => {}
 
 // GAME LOAD
 document.addEventListener('DOMContentLoaded', () => {
-    loadQuestion()
-    console.log(q.a[0])
+    show("Welcome")
+    gameWelcome.addEventListener('click', () => {
+        show("Rules")
+    })
+    loadGame()
+    gameStart.addEventListener('click', () => {
+        show("Quiz")
+        loadQuestion()
+    })
 })
