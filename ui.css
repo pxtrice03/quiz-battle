@@ -70,9 +70,9 @@ li {
     list-style: none;
     font: inherit;
 }
-@media (max-width: 425px) {
+@media (max-width: 540px) {
     body {
-        padding: 18px;
+        padding: 20px;
     }
 }
 /* 
