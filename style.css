@@ -48,7 +48,7 @@
     cursor: pointer;
     transform: rotate(-3deg);
 }
-.message {
+.message, .start {
     position: absolute;
     width: 100%;
     inset: 0;
@@ -60,6 +60,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.hidden {
+    display: none;
 }
 .modal {
     display: flex;
