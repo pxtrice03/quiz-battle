@@ -80,6 +80,23 @@
     animation: scaleUp 0.4s cubic-bezier(0.390, 0.575, 0.565, 1) both;
     /* animation: scaleDown 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; */
 
+    @media (max-width: 540px) {
+        margin: 0 20px;
+        padding: 25px 40px;
+        h2, p {
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.5rem;
+        }
+        p {
+            font-size: 1.1rem;
+        }
+        button {
+            font-size: 1rem;
+        }
+    }
+
     span b {
         display: inline-block;
         background: var(--bg);
@@ -107,6 +124,11 @@
             text-align: left;
             box-shadow: 0 4px 0 var(--border);
             font-family: var(--font-body);
+
+            @media (max-width: 540px) {
+                font-size: 1rem;
+                padding: 8px 10px 8px;
+            }
         }
 
         .rule::before {
@@ -114,6 +136,10 @@
             content: attr(data-index);
             left: -78px;
             color: currentColor;
+
+            @media (max-width: 540px) {
+                content: "";
+            }
         }
     }
 }
