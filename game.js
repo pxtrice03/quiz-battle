@@ -67,7 +67,7 @@ const GAME = [
 const CORRECT = 100
 const WRONG = 25
 const Q_KEYS = ["A", "B", "C", "D"]
-const SCREENS = ["Welcome", "Rules", "Quiz", "Final"]
+const SCREENS = ["Welcome", "Rules", "Quiz", "Screen"]
 const LVL_TIMERS = GAME.map(q => q.time)
 // Difficulty keys: 0: Beginner, 1: Intemediate, 2: Difficult
 const LVL_TITLE = ["Debutant", "Moyen", "Difficile"]
@@ -280,7 +280,7 @@ const loadQuestion = () => {
     startTimer(timer)
 }
 
-const loadGame = () => {
+const loadRules = () => {
     const startScreens = document.querySelectorAll('start')
     const rules = [
         `${GAME.length} niveaux, ${GAME[0].questions.length} questions chacun`,
@@ -332,12 +332,13 @@ const showFinalScore = () => {
 }
 
 // GAME LOAD
+// The whole game starts here
 document.addEventListener('DOMContentLoaded', () => {
     show("Welcome")
     gameWelcome.addEventListener('click', () => {
         show("Rules")
     })
-    loadGame()
+    loadRules()
     gameStart.addEventListener('click', () => {
         show("Quiz")
         loadQuestion()
