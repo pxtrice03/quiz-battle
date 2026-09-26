@@ -2,4 +2,5 @@
 
  A simple quiz game with levels
 
-![Quiz Battle Game](./quiz-battle-game-screen.png)
+<img src="./images/quiz-battle-game-screen.png" alt="Quiz Battle Game" width="300" />
+
