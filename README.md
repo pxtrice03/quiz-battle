@@ -2,6 +2,7 @@
 
  A simple quiz game with levels
 
- <div class="center">
+ <figure align="center">
  	<img src="./images/quiz-battle-game-screen.png" alt="Quiz Battle Game" width="800" />
- </div>
+ 	<figcaption>V0 of Quiz Battle</figcaption>
+ </figure>
