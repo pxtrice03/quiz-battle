@@ -11,28 +11,24 @@
 </head>
 <body>
     <div id="quizBattleUI">
-        <!-- <span class="badge">by <a href="https://github.com/pxtrice03">Patrice</a> & Kevyn</span> -->
+        <span class="badge">by <a href="https://github.com/pxtrice03">Patrice</a> & Kevyn</span>
 
         <!-- Start Screen -->
-        <!-- <section id="screenStart" class="message">
+        <section id="screenWelcome" class="start">
             <div class="modal">
                 <p>Bienvenue sur <span><b>Quiz</b> Battle</span></p>
                 <button type="button" class="btn" id="gameWelcome">Voir les regles</button>
             </div>
-        </section> -->
+        </section>
 
         <!-- Rules Screen -->
-        <!-- <section id="screenRule" class="message">
+        <section id="screenRules" class="start">
             <div class="modal">
                 <h2>Les regles du jeux</h2>
-                <ul class="rules">
-                    <li class="rule">3 niveaux, 6 questions chacun</li>
-                    <li class="rule">+100 XP par bonne reponse</li>
-                    <li class="rule">-25 XP par erreur ou temps ecoule</li>
-                </ul>
+                <ul id="rules" class="rules"></ul>
                 <button type="button" class="btn" id="gameStart">Commencer</button>
             </div>
-        </section> -->
+        </section>
 
         <!-- Actual Quiz Screen -->
         <section id="screenQuiz" class="screen">
@@ -55,20 +51,15 @@
 
             <p id="question" class="question"></p>
 
-            <div id="answers" class="answers">
-                <!-- <button class="answer correct" data-key="A">correct answer</button>
-                <button class="answer disabled" data-key="B">disabled option</button>
-                <button class="answer" data-key="C">answer 3</button>
-                <button class="answer wrong" data-key="D">wrong answer</button> -->
-            </div>
-            <p id="feedback" class="feedback">Feedback according to user response! +100 XP</p>
+            <div id="answers" class="answers"></div>
+            <p id="feedback" class="feedback"></p>
         </section>
 
         <!-- Final screen: Stats & Scores -->
-        <!-- <section id="screenFinal" class="message">
+        <section id="screenFinal" class="message">
             <div id="quizEndGame" class="modal"></div>
             <button type="button" id="replay">Rejouer</button>
-        </section> -->
+        </section>
     </div>
     <script src="./game.js"></script>
 </body>
