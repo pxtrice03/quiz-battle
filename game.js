@@ -107,7 +107,6 @@ const question = byId("question")
 const answers = byId("answers")
 const feedback = byId("feedback")
 
-let qId = 0, levelId = 0
 // score & progress tracking
 let score = 0, correctAnswers = 0, totalAnswerd = 0
 let results = [] // results[i] = { correct, total }
@@ -118,30 +117,62 @@ let timer = null
 let q
 let answerd = false
 
+const whenTimesDown = () => {
+    if(answerd) return
+    answerd = true
+
+    stopTimer()
+    score = Math.max(0, score - WRONG)
+    xp.textContent = `${score} XP`
+    updateQuestionCount()
+
+    answers.querySelectorAll('button').forEach(b => b.classList.add('disabled'))
+    showCorrectAnswer(q.c)
+
+    setTimeout(() => {
+        answerd = false
+        nextQuestion()
+    }, 1500)
+}
+
 // update timer bar
 const startTimer = (seconds, barEl = byId("bar")) => {
     const total = seconds
+    // resetting them so the previous color does no moer persits
+    secText.style.color = ''
+    barEl.style.backgroundColor = ''
     const tick = () => {
         const quarterTime = 1 / 4 * total // 1/4 of seconds
         barEl.style.width = (seconds / total * 100) + '%'
         secText.textContent = seconds + 's'
-        if(seconds <= 0) return
+        if(seconds <= 0) {
+            whenTimesDown()
+            return
+        }
         if(seconds == Math.round(quarterTime)) {
             secText.style.color = 'var(--wrong)'
             barEl.style.backgroundColor = 'var(--wrong-bg)'
         }
         seconds--
-        setTimeout(tick, 1000)
+        timer = setTimeout(tick, 1000)
     }
     tick()
 }
-const stopTimer = () => {}
+
+const stopTimer = () => {
+    clearTimeout(timer)
+    timer = null
+}
 
 const resetGame = () => {
-    let score = 0, correctAnswers = 0, totalAnswerd = 0
-    let currentLevel = 0
-    let currentQuestion = 0
-    let timer = null
+    score = 0
+    correctAnswers = 0
+    totalAnswerd = 0
+    results = []
+    currentLevel = 0
+    currentQuestion = 0
+    answerd = false
+    stopTimer()
 }
 
 const nextQuestion = () => {
@@ -181,6 +212,9 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
 
     q = GAME[currentLevel].questions[currentQuestion]
 
+    // stop the timer after the answer is chosen
+    stopTimer()
+
     // disable evry list element
     answers.querySelectorAll('button').forEach((b, i) => {
         if(i !== selectedBtnId) b.classList.add('disabled')
@@ -199,6 +233,12 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
         showCorrectAnswer(q.c)
     }
     xp.textContent = `${score} XP`
+
+    // inside checkAnswer, after scoring logic
+    if (!results[currentLevel]) results[currentLevel] = { correct: 0, total: 0 }
+    results[currentLevel].total++
+    if (selectedBtnId === q.c) results[currentLevel].correct++
+
     setTimeout(() => {
         answerd = false
         nextQuestion()
@@ -213,22 +253,25 @@ const resetTxts = () => {
 }
 
 const loadQuestion = () => {
+    q = GAME[currentLevel].questions[currentQuestion]
     resetTxts()
     levelTitle.innerHTML = LVL_TITLE[currentLevel]
     const levelQuestTotal = GAME[currentLevel].questions.length
     questionCount.innerHTML = `Question: <strong>${totalAnswerd}</strong> sur <strong>${levelQuestTotal}</strong>`
-    q = GAME[currentLevel].questions[currentQuestion]
     question.textContent = q.q
-    // const shuffleAnswers = shuffleArr([...q.a])
-    const ans = [...q.a]
-    ans.forEach((a, i) => {
+    const shuffleAnswers = shuffleArr(...q.a.map((txt, i) => ({
+        text,
+        isCorrect: i === q.c
+    })))
+    // const ans = [...q.a]
+    shuffleAnswers.forEach((a, i) => {
         const button = document.createElement('button')
         button.classList.add('answer')
         // button.dataset.key = Q_KEYS[i]
         button.setAttribute('data-key', Q_KEYS[i])
         button.classList.remove('correct', 'wrong')
-        button.textContent = a
-        button.addEventListener('click', (e) => checkAnswer(i, e.currentTarget))
+        button.textContent = a.text
+        button.addEventListener('click', (e) => checkAnswer(a.isCorrect ? 'correct-marker' : i, e.currentTarget))
         answers.appendChild(button)
     })
     timer = LVL_TIMERS[currentLevel]
@@ -240,19 +283,28 @@ const loadGame = () => {
     const rules = [
         `${GAME.length} niveaux, ${GAME[0].questions.length} questions chacun`,
         `+${CORRECT} XP par bonne reponse`,
-        `-${WRONG} XP par erreur ou temps ecoule`
+        `-${WRONG} XP par erreur ou temps ecoule`,
+        `<BONNE CHANCE/>`
     ]
     const rulesEl = byId('rules')
     rulesEl.innerHTML = ""
-    rules.forEach(r => {
+    rules.forEach((r, i) => {
         const li = document.createElement('li')
         li.classList.add('rule')
+        li.setAttribute('data-index', `regle ${i + 1}:`)
         li.textContent = r
         rulesEl.appendChild(li)
     })
 }
 
-const showFinalScore = () => {}
+const showFinalScore = () => {
+    show("Final")
+    const totalQuestions = GAME.reduce((sum, lvl) => sum + lvl.questions.length, 0)
+    byId("finalScore").innerHTML = `
+        <p>Score final: <strong>${score} XP</strong></p>
+        <p>Bonnes reponses: <strong>${correctAnswers}</strong> sur <strong>${totalQuestions}</strong></p>
+    `
+}
 
 // GAME LOAD
 document.addEventListener('DOMContentLoaded', () => {
