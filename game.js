@@ -110,7 +110,7 @@ const feedback = byId("feedback")
 // score & progress tracking
 let score = 0, correctAnswers = 0, totalAnswerd = 0
 let results = [] // results[i] = { correct, total }
-let answered = false // prevents double-clicking or clicking after timeout
+let isRight = false
 let currentLevel = 0
 let currentQuestion = 0
 let timer = null
@@ -194,10 +194,20 @@ const nextQuestion = () => {
 const showCorrectAnswer = (answerId) => {
     feedback.style.display = 'block'
     feedback.textContent = `Mauvaise reponse! -25 XP. Il fallait dire: ${q.a[answerId]}`
+    feedback.style.color = 'var(--wrong)'
     setTimeout(() => {
         feedback.style.display = 'none'
     }, 2500);
     answers.querySelectorAll('button')[answerId].classList.add('correct')
+}
+
+const showCorrectGain = (isCorrect) => {
+    feedback.style.display = 'block'
+    feedback.style.color = 'var(--correct)'
+    if(isCorrect) feedback.textContent = `Bonne reponse! vous avez gagner +100 XP`
+    setTimeout(() => {
+        feedback.style.display = 'none'
+    }, 2500);
 }
 
 const updateQuestionCount = () => {
@@ -227,6 +237,8 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
         score += CORRECT
         clickedBtn.classList.add("correct")
         // increment to keep track with the number of correct answer
+        isRight = true
+        showCorrectGain(isRight)
         correctAnswers++
     } else {
         // maintain score to 0 if get wrong on first roll with score still at zero
@@ -256,6 +268,7 @@ const resetTxts = () => {
     questionCount.innerHTML = ""
     question.innerHTML = ""
     answers.innerHTML = ""
+    feedback.style.display = 'none'
 }
 
 const loadQuestion = () => {
@@ -314,8 +327,8 @@ const showFinalScore = () => {
 
     byId("quizEndGame").innerHTML = `
         <div class="header">
-            <h2>Partie terminee</h2>
-            <div class="score">
+            <!-- <h2>Partie terminee</h2> -->
+            <div class="score" style="text-align: center;">
                 <span>Score</span>
                 <p><strong>${score} XP</strong></p>
             </div>
@@ -330,6 +343,9 @@ const showFinalScore = () => {
                 <p><strong>${correctAnswers} / ${totalQuestions}</strong></p>
             </div>
         </div>
+
+        <h2>Score par niveaux</h2>
+
         <div class="levels-stats">
             ${results.map((r, i) => {
                 const pct = Math.round((r.correct / r.total) * 100)
