@@ -67,7 +67,7 @@ const GAME = [
 const CORRECT = 100
 const WRONG = 25
 const Q_KEYS = ["A", "B", "C", "D"]
-const SCREENS = ["Welcome", "Rules", "Quiz", "Screen"]
+const SCREENS = ["Welcome", "Rules", "Quiz", "Scores"]
 const LVL_TIMERS = GAME.map(q => q.time)
 // Difficulty keys: 0: Beginner, 1: Intemediate, 2: Difficult
 const LVL_TITLE = ["Debutant", "Moyen", "Difficile"]
@@ -308,7 +308,7 @@ const loadRules = () => {
 }
 
 const showFinalScore = () => {
-    show("Final")
+    show("Scores")
     const totalQuestions = GAME.reduce((sum, lvl) => sum + lvl.questions.length, 0)
     const overallPrctg = Math.round((correctAnswers / totalQuestions) * 100)
 
