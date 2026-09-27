@@ -23,10 +23,6 @@
         transform 0.3s ease
     ;
 
-    &:hover {
-        background: var(--primary-hover);
-    }
-
     &:active {
         transform: translateY(3px);
         box-shadow: 0 0 0 var(--border);
@@ -118,7 +114,7 @@
     font-weight: 600;
     padding: 10px 20px;
     background: var(--surface-2);
-    color: var(--ink);
+    /*color: var(--ink);*/
     border: 3px solid var(--border);
     border-radius: var(--radius);
     cursor: pointer;
@@ -187,7 +183,7 @@
         }
 
         p {
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             font-family: var(--font-score);
         }
     }
@@ -290,21 +286,30 @@
     background: var(--primary);
     color: var(--ink);
     border-radius: var(--radius);
-    padding: 40px 65px;
+    padding: 20px 35px;
     border: 3px solid var(--border);
     box-shadow: 0 4px 0 var(--border);
+    text-align: center;
 }
 .levels-stats {
     margin: 20px 0;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
 
     .level-stat {
+        display: flex;
+        flex: 1;
         padding: 10px 20px;
         font-weight: 600;
         padding: 10px 20px;
         background: var(--surface-2);
         border: 3px solid var(--border);
         border-radius: var(--radius);
-        cursor: pointer;
         text-align: left;
         box-shadow: 0 4px 0 var(--border);
         
