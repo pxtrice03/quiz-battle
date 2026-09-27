@@ -13,11 +13,11 @@ const GAME = [
                 a: ["const", "let", "var", "constant"],
                 c: 0
             },
-            // {
-            //     q: "Un age est de quel type en JavaScript?",
-            //     a: ["Entier", "Int", "Nombre", "Number"],
-            //     c: 3
-            // }
+            {
+                q: "Un age est de quel type en JavaScript?",
+                a: ["Entier", "Int", "Nombre", "Number"],
+                c: 3
+            }
         ]
     },
     {
@@ -34,11 +34,11 @@ const GAME = [
                 a: ["Garder du code", "Stoker les donnees", "Coder", "Collaborer & partage du code"],
                 c: 3
             },
-            // {
-            //     q: "A quoi sert JavaScript?",
-            //     a: ["Creer des jeux", "Changer les couleurs seul", "Rendre le site dynmique", "Faire disparaitre les elements"],
-            //     c: 2
-            // },
+            {
+                q: "A quoi sert JavaScript?",
+                a: ["Creer des jeux", "Changer les couleurs seul", "Rendre le site dynmique", "Faire disparaitre les elements"],
+                c: 2
+            },
         ]
     },
     {
@@ -55,11 +55,11 @@ const GAME = [
                 a: ["console()", "map()", "push()", "forEach()"],
                 c: 1
             },
-            // {
-            //     q: "Quel operateur verifie la valeur et le type?",
-            //     a: ["===", "==", "=", "!="],
-            //     c: 0
-            // }
+            {
+                q: "Quel operateur verifie la valeur et le type?",
+                a: ["===", "==", "=", "!="],
+                c: 0
+            }
         ]
     }
 ]
@@ -201,10 +201,10 @@ const showCorrectAnswer = (answerId) => {
 }
 
 const updateQuestionCount = () => {
-    questionCount.innerHTML = ""
+    //questionCount.innerHTML = "" // drop this now used 
     const levelQuestTotal = GAME[currentLevel].questions.length
     totalAnswerd++
-    questionCount.innerHTML = `Question: <strong>${totalAnswerd}</strong> sur <strong>${levelQuestTotal}</strong>`
+    questionCount.innerHTML = `Question: <strong>${currentQuestion + 1}</strong> sur <strong>${levelQuestTotal}</strong>`
 }
 
 const checkAnswer = (selectedBtnId, clickedBtn) => {
@@ -216,7 +216,7 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
     // stop the timer after the answer is chosen
     stopTimer()
 
-    // disable evry list element
+    // disable every list element
     answers.querySelectorAll('button').forEach((b, i) => {
         if(i !== selectedBtnId) b.classList.add('disabled')
     })
@@ -226,7 +226,8 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
     if(selectedBtnId === q.c) {
         score += CORRECT
         clickedBtn.classList.add("correct")
-        // correctAnswers++
+        // increment to keep track with the number of correct answer
+        correctAnswers++
     } else {
         // maintain score to 0 if get wrong on first roll with score still at zero
         score = Math.max(0, score - WRONG)
@@ -236,9 +237,13 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
     }
     xp.textContent = `${score} XP`
 
-    if (!results[currentLevel]) results[currentLevel] = { correct: correctAnswers, total: GAME[currentLevel].questions.length }
+    if (!results[currentLevel]) {
+        results[currentLevel] = { correct: 0, total: GAME[currentLevel].questions.length }
+    }
     // results[currentLevel].total++
-    if (selectedBtnId === q.c) results[currentLevel].correct++
+    if (selectedBtnId === q.c) {
+        results[currentLevel].correct++
+    }
 
     setTimeout(() => {
         answerd = false
@@ -255,10 +260,13 @@ const resetTxts = () => {
 
 const loadQuestion = () => {
     q = GAME[currentLevel].questions[currentQuestion]
+    if (!results[currentLevel]) {
+        results[currentLevel] = { correct: 0, total: GAME[currentLevel].questions.length }
+    }
     resetTxts()
     levelTitle.innerHTML = LVL_TITLE[currentLevel]
     const levelQuestTotal = GAME[currentLevel].questions.length
-    questionCount.innerHTML = `Question: <strong>${totalAnswerd}</strong> sur <strong>${levelQuestTotal}</strong>`
+    questionCount.innerHTML = `Question: <strong>${currentQuestion + 1}</strong> sur <strong>${levelQuestTotal}</strong>`
     question.textContent = q.q
     // const shuffleAnswers = shuffleArr(...q.a.map((txt, i) => ({
     //     text,
@@ -281,7 +289,7 @@ const loadQuestion = () => {
 }
 
 const loadRules = () => {
-    const startScreens = document.querySelectorAll('start')
+    const startScreens = document.querySelectorAll('.start')
     const rules = [
         `${GAME.length} niveaux, ${GAME[0].questions.length} questions chacun`,
         `+${CORRECT} XP par bonne reponse`,
@@ -302,46 +310,50 @@ const loadRules = () => {
 const showFinalScore = () => {
     show("Final")
     const totalQuestions = GAME.reduce((sum, lvl) => sum + lvl.questions.length, 0)
+    const overallPrctg = Math.round((correctAnswers / totalQuestions) * 100)
 
-    if(results.length >= 0) {
-        byId("quizEndGame").innerHTML = ""
-        results.forEach((score, i), () => {
-            byId("quizEndGame").innerHTML = `
-                <div class="header">
-                    <h2>Partie terminee</h2>
-                    <div class="score">
-                        <span>Score</span>
-                        <p><strong>${score} XP</strong></p>
+    byId("quizEndGame").innerHTML = `
+        <div class="header">
+            <h2>Partie terminee</h2>
+            <div class="score">
+                <span>Score</span>
+                <p><strong>${score} XP</strong></p>
+            </div>
+        </div>
+        <div class="stats">
+            <div class="quiz-stat">
+                <span>Reussite</span>
+                <p><strong>${overallPrctg}%</strong></p>
+            </div>
+            <div class="quiz-stat">
+                <span>Bonnes reponses</span>
+                <p><strong>${correctAnswers} / ${totalQuestions}</strong></p>
+            </div>
+        </div>
+        <div class="levels-stats">
+            ${results.map((r, i) => {
+                const pct = Math.round((r.correct / r.total) * 100)
+                return `
+                    <div class="level-stat">
+                        <p>${LVL_TITLE[i]} : ${r.correct}/${r.total} (${pct}%)</p>
                     </div>
-                </div>
-                <div class="stats">
-                    <div class="quiz-stat"></div>
-                    <div class="quiz-stat"></div>
-                </div>
-            `
-        })
-    }
-    replayBtn.addEventListener('click', () => {
-        resetGame()
-        show("Quiz")
-    })
-    byId("finalScore").innerHTML = `
-        <p>Score final: <strong>${score} XP</strong></p>
-        <p>Bonnes reponses: <strong>${correctAnswers}</strong> sur <strong>${totalQuestions}</strong></p>
+                `
+            }).join('')}
+        </div>
     `
 }
 
 // GAME LOAD
-// The whole game starts here
 document.addEventListener('DOMContentLoaded', () => {
     show("Welcome")
-    gameWelcome.addEventListener('click', () => {
-        show("Rules")
-    })
+    gameWelcome.addEventListener('click', () => show("Rules"))
     loadRules()
     gameStart.addEventListener('click', () => {
-        show("Quiz")
-        loadQuestion()
+        show("Quiz"); loadQuestion()
     })
-    console.log(results)
+    replayBtn.addEventListener('click', () => {
+        resetGame()
+        show("Quiz")
+        loadQuestion()   // was missing — replay showed a blank quiz screen before
+    })
 })
