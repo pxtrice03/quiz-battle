@@ -5,7 +5,7 @@ const GAME = [
         questions: [
             {
                 q: "Completez la phrase: Une variable ...",
-                a: ["Mets de cote", "Reserve", "Stocker", "Garder"],
+                a: ["Mets de cote", "Regarder", "Stocker", "Jardiner"],
                 c: 2
             },
             {
@@ -15,7 +15,7 @@ const GAME = [
             },
             {
                 q: "Un age est de quel type en JavaScript?",
-                a: ["Entier", "Int", "Nombre", "Number"],
+                a: ["Entier", "Int", "Chiffre", "Number"],
                 c: 3
             }
         ]
@@ -82,7 +82,7 @@ const show = name => SCREENS.forEach(s => {
 const shuffleArr = (array) => {
     const arr = array.slice()
     for(let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
+        const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]]
     }
     return arr
@@ -93,7 +93,7 @@ const shuffleArr = (array) => {
 const screenStart = byId("screenStart")
 const screenRule = byId("screenRule")
 const screenQuiz = byId("screenQuiz")
-const screenFinal = byId("screenFinal")
+const screenFinal = byId("screenScores")
 // On Game Buttons
 const gameWelcome = byId("gameWelcome")
 const gameStart = byId("gameStart")
@@ -173,6 +173,7 @@ const resetGame = () => {
     currentLevel = 0
     currentQuestion = 0
     answerd = false
+    xp.textContent = '0 XP'
     stopTimer()
 }
 
