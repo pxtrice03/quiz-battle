@@ -79,6 +79,7 @@ const show = name => SCREENS.forEach(s => {
     byId('screen' + s).classList.toggle('hidden', s !== name)
 })
 
+// the Fisher-Yates algorithm
 const shuffleArr = (array) => {
     const arr = array.slice()
     for(let i = arr.length - 1; i > 0; i--) {
@@ -110,7 +111,6 @@ const feedback = byId("feedback")
 // score & progress tracking
 let score = 0, correctAnswers = 0, totalAnswerd = 0
 let results = [] // results[i] = { correct, total }
-let isRight = false
 let currentLevel = 0
 let currentQuestion = 0
 let timer = null
@@ -202,10 +202,10 @@ const showCorrectAnswer = (answerId) => {
     answers.querySelectorAll('button')[answerId].classList.add('correct')
 }
 
-const showCorrectGain = (isCorrect) => {
+const showCorrectGain = () => {
     feedback.style.display = 'block'
     feedback.style.color = 'var(--correct)'
-    if(isCorrect) feedback.textContent = `Bonne reponse! vous avez gagner +100 XP`
+    feedback.textContent = `Bonne reponse! vous avez gagner +100 XP`
     setTimeout(() => {
         feedback.style.display = 'none'
     }, 2500);
@@ -238,8 +238,7 @@ const checkAnswer = (selectedBtnId, clickedBtn) => {
         score += CORRECT
         clickedBtn.classList.add("correct")
         // increment to keep track with the number of correct answer
-        isRight = true
-        showCorrectGain(isRight)
+        showCorrectGain()
         correctAnswers++
     } else {
         // maintain score to 0 if get wrong on first roll with score still at zero
@@ -282,19 +281,13 @@ const loadQuestion = () => {
     const levelQuestTotal = GAME[currentLevel].questions.length
     questionCount.innerHTML = `Question: <strong>${currentQuestion + 1}</strong> sur <strong>${levelQuestTotal}</strong>`
     question.textContent = q.q
-    // const shuffleAnswers = shuffleArr(...q.a.map((txt, i) => ({
-    //     text,
-    //     isCorrect: i === q.c
-    // })))
     const ans = [...q.a]
     ans.forEach((a, i) => {
         const button = document.createElement('button')
         button.classList.add('answer')
-        // button.dataset.key = Q_KEYS[i]
         button.setAttribute('data-key', Q_KEYS[i])
         button.classList.remove('correct', 'wrong')
         button.textContent = a
-        // button.addEventListener('click', (e) => checkAnswer(a.isCorrect ? 'correct-marker' : i, e.currentTarget))
         button.addEventListener('click', (e) => checkAnswer(i, e.currentTarget))
         answers.appendChild(button)
     })
@@ -303,7 +296,6 @@ const loadQuestion = () => {
 }
 
 const loadRules = () => {
-    const startScreens = document.querySelectorAll('.start')
     const rules = [
         `${GAME.length} niveaux, ${GAME[0].questions.length} questions chacun`,
         `+${CORRECT} XP par bonne reponse`,
@@ -360,6 +352,11 @@ const showFinalScore = () => {
     `
 }
 
+const shuffleQuestion = () => {
+    GAME.forEach(lvl => lvl.questions = shuffleArr(lvl.questions))
+}
+
+
 // GAME LOAD
 document.addEventListener('DOMContentLoaded', () => {
     show("Welcome")
@@ -370,7 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     replayBtn.addEventListener('click', () => {
         resetGame()
+        // shuffleQuestion()
         show("Quiz")
-        loadQuestion()   // was missing — replay showed a blank quiz screen before
+        loadQuestion()   
     })
 })
